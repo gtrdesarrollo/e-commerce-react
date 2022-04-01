@@ -20,7 +20,7 @@ export default function Addresses() {
 
             (async () => {
                 const response = await getAddressesApi(auth);
-                console.log(response);
+                //console.log(response);
                 // console.log(auth);
                 setAddresses(response);
                 setReloadAddress(false)

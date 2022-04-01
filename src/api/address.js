@@ -70,3 +70,50 @@ export async function deleteAddressApi(auth, idAddress) {
     }
 
 }
+
+export async function getAddressApi(auth, idAddress) {
+    try {
+        const url = `${API_URL}/addresses/${idAddress}`;
+
+        const params = {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${auth.token}`,
+            },
+        };
+
+        const response = await fetch(url, params);
+        const result = await response.json();
+
+        return result;
+    } catch (error) {
+        console.log("Error: address.js/getAddressesApi/ " + error);
+        return null;
+    }
+
+}
+
+export async function updateAddressApi(auth, address) {
+    try {
+        const url = `${API_URL}/addresses/${address._id}`;
+
+        const params = {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${auth.token}`,
+            },
+            body: JSON.stringify(address),
+        };
+
+        const response = await fetch(url, params);
+        const result = await response.json();
+
+        return result;
+
+    } catch (error) {
+        console.log("Error: address.js/getAddressesApi/ " + error);
+        return null;
+    }
+
+}

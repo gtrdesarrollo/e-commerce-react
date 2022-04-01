@@ -4,7 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import AwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import colors from '../styles/colors';
-import Home from '../screens/Home';
+import ProductStack from './ProductStack';
 import Favorites from '../screens/Favorites';
 import Cart from '../screens/Cart';
 //import Account from '../screens/Account';
@@ -28,7 +28,7 @@ export default function AppNavigation() {
             >
                 <Tab.Screen
                     name="home"
-                    component={Home}
+                    component={ProductStack}
                     options={{
                         title: "Inicio",
                     }}

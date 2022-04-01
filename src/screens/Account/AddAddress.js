@@ -1,4 +1,4 @@
-import React, { useState, useFocusEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
@@ -6,11 +6,10 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview'
 import { useNavigation } from '@react-navigation/native';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { addAddressesApi } from '../../api/address';
+import { addAddressesApi, getAddressApi, updateAddressApi } from '../../api/address';
 import useAuth from '../../hooks/useAuth';
 
 import { formStyles } from '../../styles';
-import { useEffect } from 'react/cjs/react.production.min';
 
 export default function AddAddress(props) {
 
@@ -19,13 +18,29 @@ export default function AddAddress(props) {
     } = props;
 
     const [loading, setloading] = useState(false);
+    const [newAddress, setNewAddress] = useState(true);
     const { auth } = useAuth();
     const navigation = useNavigation();
 
     useEffect(() => {
         (async () => {
             if (params?.idAddress) {
+                setNewAddress(false);
+                navigation.setOptions({ title: "Actualiza dirección" });
 
+                const response = await getAddressApi(auth, params.idAddress);
+
+                //console.log(response);
+
+                await formik.setFieldValue("_id", response._id);
+                await formik.setFieldValue("title", response.title);
+                await formik.setFieldValue("name_lastname", response.name_lastname);
+                await formik.setFieldValue("address", response.address);
+                await formik.setFieldValue("postal_code", response.postal_code);
+                await formik.setFieldValue("city", response.city);
+                await formik.setFieldValue("state", response.state);
+                await formik.setFieldValue("country", response.country);
+                await formik.setFieldValue("phone", response.phone);
             }
         })()
 
@@ -58,7 +73,9 @@ export default function AddAddress(props) {
             try {
                 setloading(true);
 
-                const response = await addAddressesApi(auth, formData);
+                if (newAddress) await addAddressesApi(auth, formData)
+                else await updateAddressApi(auth, formData)
+
                 //console.log(formData);
                 //console.log("AddAddress/response" + response);
 
@@ -138,7 +155,8 @@ export default function AddAddress(props) {
                     onPress={formik.handleSubmit}
                     loading={loading}
                 >
-                    Crear Dirección
+
+                    {newAddress ? "Crear Dirección" : "Actualizar Dirección"}
                 </Button>
 
             </View>
