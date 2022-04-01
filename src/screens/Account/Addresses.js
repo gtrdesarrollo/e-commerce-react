@@ -3,24 +3,30 @@ import { StyleSheet, View, ScrollView, Text, TouchableWithoutFeedback, ActivityI
 import { IconButton } from 'react-native-paper';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { size } from 'lodash';
+import AddressList from '../../components/Address/AddressList';
 import { getAddressesApi } from '../../api/address';
 import useAuth from '../../hooks/useAuth';
 
 export default function Addresses() {
     const [addresses, setAddresses] = useState(false);
+    const [reloadAddress, setReloadAddress] = useState(false);
     const navigation = useNavigation();
 
     const { auth } = useAuth();
 
     useFocusEffect(
         useCallback(() => {
+            setAddresses(null);
+
             (async () => {
                 const response = await getAddressesApi(auth);
                 console.log(response);
+                // console.log(auth);
                 setAddresses(response);
+                setReloadAddress(false)
             })();
 
-        }, [])
+        }, [reloadAddress])
     );
 
     return (
@@ -36,11 +42,10 @@ export default function Addresses() {
             {!addresses ? (
                 <ActivityIndicator size="large" style={styles.loading} />
             ) : size(addresses) === 0 ? (
-                <Text style={styles.noAddressText}>Crear tu primera direccion</Text>
+                <Text style={styles.noAddressText}>Crear tu primera dirección</Text>
             ) : (
-                <Text>Lista de Direcciones</Text>
-            )
-            }
+                <AddressList addresses={addresses} setReloadAddress={setReloadAddress} />
+            )}
 
         </ScrollView>
     )
@@ -68,7 +73,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     loading: {
-        marginTo, p: 20,
+        marginTop: 20,
     },
     noAddressText: {
         fontSize: 16,

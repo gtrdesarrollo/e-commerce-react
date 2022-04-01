@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useFocusEffect } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
-// import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
 
 import { useNavigation } from '@react-navigation/native';
 import { useFormik } from 'formik';
@@ -10,11 +10,42 @@ import { addAddressesApi } from '../../api/address';
 import useAuth from '../../hooks/useAuth';
 
 import { formStyles } from '../../styles';
+import { useEffect } from 'react/cjs/react.production.min';
 
-export default function AddAddress() {
+export default function AddAddress(props) {
+
+    const {
+        route: { params },
+    } = props;
+
     const [loading, setloading] = useState(false);
     const { auth } = useAuth();
     const navigation = useNavigation();
+
+    useEffect(() => {
+        (async () => {
+            if (params?.idAddress) {
+
+            }
+        })()
+
+    }, [params])
+
+
+    // useFocusEffect(
+    //     useCallback(() => {
+    //         setAddresses(null);
+
+    //         (async () => {
+    //             const response = await getAddressesApi(auth);
+    //             console.log(response);
+    //             // console.log(auth);
+    //             setAddresses(response);
+    //             setReloadAddress(false)
+    //         })();
+
+    //     }, [reloadAddress])
+    // );
 
     const formik = useFormik({
 
@@ -28,9 +59,8 @@ export default function AddAddress() {
                 setloading(true);
 
                 const response = await addAddressesApi(auth, formData);
-                if (response.statusCode) throw ("El email ya existe...");
-
-                //console.log("ChangeEmail/response" + response);
+                //console.log(formData);
+                //console.log("AddAddress/response" + response);
 
                 navigation.goBack();
             } catch (error) {
@@ -43,77 +73,77 @@ export default function AddAddress() {
     });
 
     return (
-        // <KeyboardAwareScrollView extraScrollHeight={25}>
-        <View style={styles.container}>
-            <Text style={styles.title}>Nueva dirección</Text>
-            <TextInput label="Titulo"
-                style={formStyles.input}
-                onChangeText={(text) => formik.setFieldValue("title", text)}
-                value={formik.values.title}
-                error={formik.errors.title}
-            />
+        <KeyboardAwareScrollView extraScrollHeight={25}>
+            <View style={styles.container}>
+                <Text style={styles.title}>Nueva dirección</Text>
+                <TextInput label="Titulo"
+                    style={formStyles.input}
+                    onChangeText={(text) => formik.setFieldValue("title", text)}
+                    value={formik.values.title}
+                    error={formik.errors.title}
+                />
 
-            <TextInput label="Nombre y apellidos"
-                style={formStyles.input}
-                onChangeText={(text) => formik.setFieldValue("name_lastname", text)}
-                value={formik.values.name_lastname}
-                error={formik.errors.name_lastname}
-            />
+                <TextInput label="Nombre y apellidos"
+                    style={formStyles.input}
+                    onChangeText={(text) => formik.setFieldValue("name_lastname", text)}
+                    value={formik.values.name_lastname}
+                    error={formik.errors.name_lastname}
+                />
 
-            <TextInput label="Dirección"
-                style={formStyles.input}
-                onChangeText={(text) => formik.setFieldValue("address", text)}
-                value={formik.values.address}
-                error={formik.errors.address}
-            />
+                <TextInput label="Dirección"
+                    style={formStyles.input}
+                    onChangeText={(text) => formik.setFieldValue("address", text)}
+                    value={formik.values.address}
+                    error={formik.errors.address}
+                />
 
-            <TextInput label="Código Postal"
-                style={formStyles.input}
-                onChangeText={(text) => formik.setFieldValue("postal_code", text)}
-                value={formik.values.postal_code}
-                error={formik.errors.postal_code}
-            />
+                <TextInput label="Código Postal"
+                    style={formStyles.input}
+                    onChangeText={(text) => formik.setFieldValue("postal_code", text)}
+                    value={formik.values.postal_code}
+                    error={formik.errors.postal_code}
+                />
 
-            <TextInput label="Población"
-                style={formStyles.input}
-                onChangeText={(text) => formik.setFieldValue("city", text)}
-                value={formik.values.city}
-                error={formik.errors.city}
-            />
+                <TextInput label="Población"
+                    style={formStyles.input}
+                    onChangeText={(text) => formik.setFieldValue("city", text)}
+                    value={formik.values.city}
+                    error={formik.errors.city}
+                />
 
-            <TextInput label="Estado"
-                style={formStyles.input}
-                onChangeText={(text) => formik.setFieldValue("state", text)}
-                value={formik.values.country}
-                error={formik.errors.country}
-            />
+                <TextInput label="Estado"
+                    style={formStyles.input}
+                    onChangeText={(text) => formik.setFieldValue("state", text)}
+                    value={formik.values.state}
+                    error={formik.errors.state}
+                />
 
-            <TextInput label="Pais"
-                style={formStyles.input}
-                onChangeText={(text) => formik.setFieldValue("country", text)}
-                value={formik.values.phone}
-                error={formik.errors.phone}
-            />
+                <TextInput label="Pais"
+                    style={formStyles.input}
+                    onChangeText={(text) => formik.setFieldValue("country", text)}
+                    value={formik.values.country}
+                    error={formik.errors.country}
+                />
 
-            <TextInput label="Telefono"
-                style={formStyles.input}
-                onChangeText={(text) => formik.setFieldValue("phone", text)}
-                value={formik.values.phone}
-                error={formik.errors.phone}
-            />
+                <TextInput label="Telefono"
+                    style={formStyles.input}
+                    onChangeText={(text) => formik.setFieldValue("phone", text)}
+                    value={formik.values.phone}
+                    error={formik.errors.phone}
+                />
 
-            <Button
-                mode="contained"
-                style={[formStyles.btnSuccess, styles.btnSuccess]}
-                onPress={formik.handleSubmit}
-                loading={loading}
-            >
-                Crear Dirección
-            </Button>
+                <Button
+                    mode="contained"
+                    style={[formStyles.btnSuccess, styles.btnSuccess]}
+                    onPress={formik.handleSubmit}
+                    loading={loading}
+                >
+                    Crear Dirección
+                </Button>
 
-        </View>
+            </View>
 
-        // </KeyboardAwareScrollView>
+        </KeyboardAwareScrollView>
     )
 }
 

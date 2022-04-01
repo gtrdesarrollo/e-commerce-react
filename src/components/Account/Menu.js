@@ -84,7 +84,7 @@ export default function Menu() {
                 />
                 <List.Item
                     title="Cerrar sesión"
-                    description="Cerrar esta sesión e inciiar con otra"
+                    description="Cerrar esta sesión e iniciar con otra"
                     left={(props) => <List.Icon {...props} icon="logout" />}
                     onPress={logoutAccount}
                 />

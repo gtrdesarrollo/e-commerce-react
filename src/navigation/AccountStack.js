@@ -68,7 +68,7 @@ export default function AccountStack() {
                 name="addresses"
                 component={Addresses}
                 options={{
-                    title: "Cambio de direcciones",
+                    title: "Mis direcciones",
                 }}
             />
 
